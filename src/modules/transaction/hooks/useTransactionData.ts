@@ -3,7 +3,9 @@ import { useDebouncedFilter, useNetworkRequest } from '@core/hook';
 import { useGlobalData } from '@core/provider';
 import { Transaction, TransactionResponse } from '../models/Transaction';
 
-const url = 'https://recruitment-test.flip.id/frontend-test';
+const domain = 'https://recruitment-test.flip.id';
+const endpoint = '/frontend-test';
+const url = `${domain}${endpoint}`;
 
 export const useTransactionData = () => {
   const { transaction: { selected, setSelected } } = useGlobalData();
@@ -24,7 +26,16 @@ export const useTransactionData = () => {
   }, [response]);
 
   React.useEffect(() => {
-    // TODO: Perform filter here
+    setTransactions((prev) => prev.filter((item) => {
+      const isValueIncluded = (value: string, keyword: string) => {
+        return value.toLowerCase().includes(keyword.toLowerCase());
+      };
+      const isMatched = (value: string) => isValueIncluded(value, filterKeyword);
+      return isMatched(item.beneficiary_name)
+        || isMatched(item.sender_bank)
+        || isMatched(item.beneficiary_bank)
+        || isMatched(item.amount.toString());
+    }));
   }, [filterKeyword]);
 
   const refresh = React.useCallback(() => {
@@ -48,9 +59,34 @@ export const useTransactionData = () => {
     }
   }, [setFilterKeyword]);
 
-  const sort = React.useCallback((by: string) => {
-    // TODO: Perform sort here
-  }, []);
+  const sort = React.useCallback(
+    (
+      by: 'name' | 'date',
+      order: 'asc' | 'desc'
+    ) => {
+      const sortedItems = transactions.sort((a, b) => {
+        if (by === 'name' && order === 'asc') {
+          return a.beneficiary_name.localeCompare(b.beneficiary_name);
+        }
+
+        if (by === 'name' && order === 'desc') {
+          return b.beneficiary_name.localeCompare(a.beneficiary_name);
+        }
+
+        if (by === 'date' && order === 'asc') {
+          return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+        }
+
+        if (by === 'date' && order === 'desc') {
+          return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+        }
+
+        return 0;
+      });
+
+      setTransactions([ ...sortedItems]);
+    }, [transactions]
+  );
 
   const transaction = React.useMemo(() => {
     try {
