@@ -3,7 +3,7 @@
   "compilerOptions": {
     "paths": {
       "*": ["src/*"],
-      "@core": ["src/core/index"]
+      "@core": ["src/core/index"],
       "@module/transaction": ["src/modules/transaction/index"]
     }
   }
