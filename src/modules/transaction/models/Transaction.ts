@@ -2,7 +2,7 @@ export interface Transaction {
   id: string;
   amount: number;
   unique_code: number;
-  status: string;
+  status: 'PENDING' | 'SUCCESS';
   sender_bank: string;
   account_number: string;
   beneficiary_name: string;

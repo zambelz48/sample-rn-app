@@ -1,11 +1,10 @@
 import React from 'react';
+import { API_DOMAIN } from '@core/config';
 import { useDebouncedFilter, useNetworkRequest } from '@core/hook';
 import { useGlobalData } from '@core/provider';
 import { Transaction, TransactionResponse } from '../models/Transaction';
 
-const domain = 'https://recruitment-test.flip.id';
-const endpoint = '/frontend-test';
-const url = `${domain}${endpoint}`;
+const url = `${API_DOMAIN}/frontend-test`;
 
 export const useTransactionData = () => {
   const { transaction: { selected, setSelected } } = useGlobalData();
@@ -18,25 +17,37 @@ export const useTransactionData = () => {
   } = useNetworkRequest<TransactionResponse>();
 
   const [transactions, setTransactions] = React.useState<Transaction[]>([]);
+  const [originalTransactions, setOriginalTransactions] = React.useState<Transaction[]>([]);
   const { filterKeyword, setFilterKeyword } = useDebouncedFilter();
 
   React.useEffect(() => {
     const items = Object.values(response ?? {}) as Transaction[];
+    setOriginalTransactions(items);
     setTransactions(items);
   }, [response]);
 
   React.useEffect(() => {
-    setTransactions((prev) => prev.filter((item) => {
-      const isValueIncluded = (value: string, keyword: string) => {
-        return value.toLowerCase().includes(keyword.toLowerCase());
-      };
-      const isMatched = (value: string) => isValueIncluded(value, filterKeyword);
-      return isMatched(item.beneficiary_name)
-        || isMatched(item.sender_bank)
-        || isMatched(item.beneficiary_bank)
-        || isMatched(item.amount.toString());
-    }));
-  }, [filterKeyword]);
+    if (filterKeyword && filterKeyword.trim().length === 0) {
+      setTransactions([ ...originalTransactions ]);
+    } else if (filterKeyword && filterKeyword.trim().length > 0) {
+      const filterItems = (items: Transaction[]) => items.filter((item) => {
+        const isValueIncluded = (value: string, keyword: string) => {
+          return value.toLowerCase().includes(keyword.toLowerCase());
+        };
+        const isMatched = (value: string) => isValueIncluded(value, filterKeyword);
+        return isMatched(item.beneficiary_name)
+          || isMatched(item.sender_bank)
+          || isMatched(item.beneficiary_bank)
+          || isMatched(item.amount.toString());
+      });
+
+      if (transactions.length === 0) {
+        setTransactions(filterItems(originalTransactions));
+      } else {
+        setTransactions((prev) => filterItems(prev));
+      }
+    }
+  }, [filterKeyword, originalTransactions, transactions.length]);
 
   const refresh = React.useCallback(() => {
     request(url);
@@ -56,8 +67,13 @@ export const useTransactionData = () => {
   const filter = React.useCallback((keyword: string) => {
     if (keyword.trim().length >= 3) {
       setFilterKeyword(keyword);
+    } else if (filterKeyword
+      && filterKeyword?.trim().length >= 3
+      && keyword.trim().length < 3
+    ) {
+      setFilterKeyword('');
     }
-  }, [setFilterKeyword]);
+  }, [setFilterKeyword, filterKeyword]);
 
   const sort = React.useCallback(
     (

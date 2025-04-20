@@ -10,6 +10,7 @@ module.exports = {
         root: ['./src'],
         extensions: ['.ios.js', '.android.js', '.js', '.ts', '.tsx', '.json'],
         alias: {
+          '@core/config': './src/core/config/index',
           '@core/component': './src/core/components/index',
           '@core/hook': './src/core/hooks/index',
           '@core/util': './src/core/utils/index',

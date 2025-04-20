@@ -3,3 +3,4 @@ export * from './CardContainer';
 export * from './Badge';
 export * from './Label';
 export * from './Field';
+export * from './Icon';
