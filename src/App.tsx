@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import Toast from 'react-native-toast-message';
 import { verifyInstallation } from 'nativewind';
 import { GlobalDataProvider } from '@core/provider';
 import {
@@ -18,21 +19,24 @@ export default function App() {
   verifyInstallation();
 
   return (
-    <GlobalDataProvider>
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName="transaction.list">
-          <Stack.Screen
-            name="transaction.list"
-            component={TransactionListScreen}
-            options={{ title: 'Transaction List' }}
-          />
-          <Stack.Screen
-            name="transaction.detail"
-            component={TransactionDetailScreen}
-            options={{ title: 'Transaction Detail' }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </GlobalDataProvider>
+    <>
+      <GlobalDataProvider>
+        <NavigationContainer>
+          <Stack.Navigator initialRouteName="transaction.list">
+            <Stack.Screen
+              name="transaction.list"
+              component={TransactionListScreen}
+              options={{ title: 'Transaction List' }}
+            />
+            <Stack.Screen
+              name="transaction.detail"
+              component={TransactionDetailScreen}
+              options={{ title: 'Transaction Detail' }}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </GlobalDataProvider>
+      <Toast position="bottom" bottomOffset={40} />
+    </>
   );
 }
