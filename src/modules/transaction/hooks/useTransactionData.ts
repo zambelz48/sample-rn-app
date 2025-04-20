@@ -27,9 +27,9 @@ export const useTransactionData = () => {
   }, [response]);
 
   React.useEffect(() => {
-    if (filterKeyword && filterKeyword.trim().length === 0) {
+    if (filterKeyword?.trim().length === 0) {
       setTransactions([ ...originalTransactions ]);
-    } else if (filterKeyword && filterKeyword.trim().length > 0) {
+    } else if (filterKeyword && filterKeyword.trim().length >= 3) {
       const filterItems = (items: Transaction[]) => items.filter((item) => {
         const isValueIncluded = (value: string, keyword: string) => {
           return value.toLowerCase().includes(keyword.toLowerCase());
@@ -67,10 +67,7 @@ export const useTransactionData = () => {
   const filter = React.useCallback((keyword: string) => {
     if (keyword.trim().length >= 3) {
       setFilterKeyword(keyword);
-    } else if (filterKeyword
-      && filterKeyword?.trim().length >= 3
-      && keyword.trim().length < 3
-    ) {
+    } else if (filterKeyword && keyword.trim().length < 3) {
       setFilterKeyword('');
     }
   }, [setFilterKeyword, filterKeyword]);

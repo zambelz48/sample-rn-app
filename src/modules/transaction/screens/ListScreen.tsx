@@ -68,7 +68,7 @@ export const TransactionListScreen = ({ navigation }: Props) => {
           <View className="flex flex-row items-center gap-1">
             <MagnifyIcon />
             <Field
-              className="py-5"
+              className="py-5 text-black"
               placeholder="Cari name, bank, atau nominal"
               onChangeText={filter}
             />
