@@ -12,7 +12,7 @@ import type { ModuleNavigationRoute } from '../../ModuleRoute';
 import { useTransactionData } from '../hooks/useTransactionData';
 import { TransactionItemCard } from '../components/TransactionItemCard';
 import { SortingOptionsModal } from '../components/SortingOptionsModal';
-import { COLORS } from 'core/config';
+import { COLORS } from '@core/config';
 
 type Props = NativeStackScreenProps<ModuleNavigationRoute, 'transaction.list'>
 

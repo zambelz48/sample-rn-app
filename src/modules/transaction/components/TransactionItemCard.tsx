@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import { ArrowRightIcon, Badge, CardContainer, DotIcon, Label } from '@core/component';
 import { formatAmount, formatBankName, formatDate } from '@core/util';
-import { COLORS } from 'core/config';
+import { COLORS } from '@core/config';
 
 interface TransactionItemCardProps {
   status: 'PENDING' | 'SUCCESS'

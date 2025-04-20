@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import { Label, RadioCheckedIcon, RadioUncheckedIcon } from '@core/component';
-import { COLORS } from 'core/config';
+import { COLORS } from '@core/config';
 
 interface SortingOptionsModalProps {
   options: {
