@@ -63,3 +63,6 @@ yarn ios:run
 - Display transaction detail
 - Copy transaction id to clipboard
 - Expand and collapse transaction details
+
+## Screencast
+- Link: https://drive.google.com/file/d/19veMYSUIWpNl3HfkT-8LGTwluyklCFAV/view?usp=sharing
