@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlatList, TouchableOpacity, View } from 'react-native';
+import { Button, FlatList, TouchableOpacity, View } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import {
   Container,
@@ -83,12 +83,23 @@ export const TransactionListScreen = ({ navigation }: Props) => {
             <ChevronDownIcon color={COLORS.orange} />
           </TouchableOpacity>
         </View>
-        {loading && <Label>Loading...</Label>}
-        {error && <Label>Error: {error.message}</Label>}
+        {loading && (<Label className="text-center my-4">
+          Retrieving data...
+        </Label>)}
+        {error && (
+          <View className="flex flex-col items-center justify-center w-full h-full">
+            <Label className="text-center">
+              Error: {error.message}
+            </Label>
+            <Button title="Refresh" onPress={refresh} />
+          </View>
+        )}
         {transactions.length > 0 && (
           <FlatList
             className="w-full"
             data={transactions}
+            refreshing={loading}
+            onRefresh={refresh}
             renderItem={({ item }) => (
               <TouchableOpacity onPress={() => {
                 selectTransaction(item);

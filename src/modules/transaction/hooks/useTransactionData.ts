@@ -50,6 +50,7 @@ export const useTransactionData = () => {
   }, [filterKeyword, originalTransactions, transactions.length]);
 
   const refresh = React.useCallback(() => {
+    setTransactions([]);
     request(url);
   }, [request]);
 
